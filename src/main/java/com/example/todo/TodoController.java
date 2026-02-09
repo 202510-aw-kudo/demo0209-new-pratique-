@@ -1,14 +1,23 @@
 package com.example.todo;
 
+import com.example.todo.form.TodoForm;
+import com.example.todo.service.TodoService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TodoController {
+
+  private final TodoService todoService;
+
+  public TodoController(TodoService todoService) {
+    this.todoService = todoService;
+  }
 
   // Affiche la page de la liste des todos.
   @GetMapping("/todos")
@@ -16,44 +25,30 @@ public class TodoController {
     return "todo/list";
   }
 
-  // Affiche la page de création d'un nouveau todo.
+  // Affiche la page de creation d'un nouveau todo.
   @GetMapping("/todos/new")
   public String showForm() {
     return "todo/form";
   }
 
-  // Affiche la page de détail du todo pour l'id donné.
+  // Affiche la page de detail du todo pour l'id donne.
   @GetMapping("/todos/{id}")
   public String showTodo(@PathVariable("id") long id) {
     return "todo/detail";
   }
 
-  // ② recevoir le formulaire → afficher la confirmation
+  // Recoit le formulaire et affiche l'ecran de confirmation.
   @PostMapping("/todos/confirm")
-  public String confirmTodo(
-      @RequestParam(name = "title", required = true) String title,
-      @RequestParam(name = "description", required = false) String description,
-      @RequestParam(name = "priority", defaultValue = "3") Integer priority,
-      Model model) {
-
-    model.addAttribute("title", title);
-    model.addAttribute("description", description);
-    model.addAttribute("priority", priority);
-
+  public String confirmTodo(@ModelAttribute TodoForm form, Model model) {
+    model.addAttribute("todoForm", form);
     return "todo/confirm";
   }
 
-  // Traite l'enregistrement final à partir des valeurs cachées du formulaire de
-  // confirmation.
+  // Enregistre le todo et redirige vers la liste avec un message flash.
   @PostMapping("/todos/complete")
-  public String completeTodo(
-      @RequestParam(name = "title", required = true) String title,
-      @RequestParam(name = "description", required = false) String description,
-      @RequestParam(name = "priority", required = false, defaultValue = "3") Integer priority,
-      Model model) {
-    model.addAttribute("title", title);
-    model.addAttribute("description", description);
-    model.addAttribute("priority", priority);
-    return "todo/complete";
+  public String completeTodo(@ModelAttribute TodoForm form, RedirectAttributes redirectAttributes) {
+    todoService.createTodo(form);
+    redirectAttributes.addFlashAttribute("message", "登録が完了しました");
+    return "redirect:/todos";
   }
 }
