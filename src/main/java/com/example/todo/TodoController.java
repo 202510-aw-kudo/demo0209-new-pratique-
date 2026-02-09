@@ -28,6 +28,21 @@ public class TodoController {
     return "todo/detail";
   }
 
+  // ② recevoir le formulaire → afficher la confirmation
+  @PostMapping("/todos/confirm")
+  public String confirmTodo(
+      @RequestParam(name = "title", required = true) String title,
+      @RequestParam(name = "description", required = false) String description,
+      @RequestParam(name = "priority", defaultValue = "3") Integer priority,
+      Model model) {
+
+    model.addAttribute("title", title);
+    model.addAttribute("description", description);
+    model.addAttribute("priority", priority);
+
+    return "todo/confirm";
+  }
+
   // Traite l'enregistrement final à partir des valeurs cachées du formulaire de
   // confirmation.
   @PostMapping("/todos/complete")
