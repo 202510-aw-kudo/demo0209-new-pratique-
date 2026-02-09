@@ -18,8 +18,8 @@ public class TodoController {
 
   // Affiche la page de création d'un nouveau todo.
   @GetMapping("/todos/new")
-  public String newTodo() {
-    return "todo/new";
+  public String showForm() {
+    return "todo/form";
   }
 
   // Affiche la page de détail du todo pour l'id donné.
@@ -28,7 +28,8 @@ public class TodoController {
     return "todo/detail";
   }
 
-  // Traite l'enregistrement final à partir des valeurs cachées du formulaire de confirmation.
+  // Traite l'enregistrement final à partir des valeurs cachées du formulaire de
+  // confirmation.
   @PostMapping("/todos/complete")
   public String completeTodo(
       @RequestParam(name = "title", required = true) String title,
