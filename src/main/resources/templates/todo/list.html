@@ -21,7 +21,7 @@
     <main class="container">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="h4 mb-0">ToDo List</h2>
-        <a class="btn btn-primary" href="/todos/new">新規作成</a>
+        <a class="btn btn-primary" th:href="@{/todos/new}">新規作成</a>
       </div>
 
       <div class="table-responsive">
@@ -36,15 +36,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>サンプルタスク</td>
-              <td>2026-02-10</td>
-              <td>未完了</td>
+            <tr th:each="todo : ${todos}">
+              <td th:text="${todo.id}">1</td>
+              <td th:text="${todo.title}">サンプルタスク</td>
+              <td th:text="${todo.dueDate}">2026-02-10</td>
+              <td th:text="${todo.status}">未完了</td>
               <td class="text-end">
-                <a class="btn btn-sm btn-outline-secondary me-1" href="/todos/1">詳細</a>
-                <a class="btn btn-sm btn-outline-primary me-1" href="/todos/1/edit">編集</a>
-                <a class="btn btn-sm btn-outline-danger" href="/todos/1/delete">削除</a>
+                <a class="btn btn-sm btn-outline-secondary me-1" th:href="@{/todos/{id}(id=${todo.id})}">詳細</a>
+                <a class="btn btn-sm btn-outline-primary me-1" th:href="@{/todos/{id}/edit(id=${todo.id})}">編集</a>
+                <a class="btn btn-sm btn-outline-danger" th:href="@{/todos/{id}/delete(id=${todo.id})}">削除</a>
               </td>
             </tr>
           </tbody>
