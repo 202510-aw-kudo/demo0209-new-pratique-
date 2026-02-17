@@ -21,9 +21,10 @@ public class TodoController {
 
   // Affiche la page de la liste des todos.
   @GetMapping("/todos")
-  public String listTodos() {
+public String listTodos() {
     return "todo/list";
-  }
+}
+
 
   // Affiche la page de creation d'un nouveau todo.
   @GetMapping("/todos/new")
